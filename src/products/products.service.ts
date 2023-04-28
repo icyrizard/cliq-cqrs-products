@@ -1,49 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
-import { PrismaService } from '../prisma.service';
+import { AggregateRoot, CommandBus } from '@nestjs/cqrs';
+import { CreateProductCommand } from './commands/logic/create-product.command';
 
 @Injectable()
-export class ProductsService {
-  constructor(private prisma: PrismaService) {}
+export class ProductsService extends AggregateRoot {
+  constructor(private commandBus: CommandBus) {
+    super();
+  }
 
   async create(createProductInput: CreateProductInput) {
-    return await this.prisma.product.create({
-      data: createProductInput,
-    });
+    // this.apply(new CreateProductCommand(createProductInput));
+    // this.eventBus.publish(new CreateProductEvent(createProductInput));
+    return await this.commandBus.execute(
+      new CreateProductCommand(createProductInput),
+    );
   }
 
   async findAll() {
-    return await this.prisma.product.findMany();
+    // return this.productRepository.findAll();
   }
 
   async findOne(id: number) {
-    return await this.prisma.product.findFirstOrThrow({
-      where: {
-        id: id,
-        deletedAt: null,
-      },
-    });
+    // return this.productRepository.findOne(id);
   }
 
   async update(id: number, updateProductInput: UpdateProductInput) {
-    return await this.prisma.product.updateMany({
-      where: {
-        id: id,
-        deletedAt: null,
-      },
-      data: updateProductInput,
-    });
+    // return this.productRepository.update(id, updateProductInput);
   }
 
   async remove(id: number) {
-    return await this.prisma.product.update({
-      where: {
-        id: id,
-      },
-      data: {
-        deletedAt: null,
-      },
-    });
+    // return this.productRepository.remove(id);
   }
 }
