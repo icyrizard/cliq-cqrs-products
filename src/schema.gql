@@ -2,29 +2,64 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CreateProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+type Product {
+  """Id of the product"""
+  id: Int!
+
+  """UUId of the product"""
+  uuid: String!
+
+  """Name of the product"""
+  name: String!
+
+  """SKU of the product"""
+  sku: String
+
+  """Price of the product"""
+  price: Float
+
+  """Description of the product"""
+  description: String
+}
+
+type Query {
+  products: [Product!]!
+  product(id: Int!): Product!
 }
 
 type Mutation {
   createProduct(createProductInput: CreateProductInput!): Product!
-  removeProduct(id: Int!): Product!
   updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
 }
 
-type Product {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
+input CreateProductInput {
+  """Name of the product"""
+  name: String!
 
-type Query {
-  product(id: Int!): Product!
-  products: [Product!]!
+  """SKU of the product"""
+  sku: String
+
+  """Price of the product"""
+  price: Float
+
+  """Description of the product"""
+  description: String
 }
 
 input UpdateProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  """Name of the product"""
+  name: String!
+
+  """SKU of the product"""
+  sku: String
+
+  """Price of the product"""
+  price: Float
+
+  """Description of the product"""
+  description: String
+
+  """Id of the product"""
   id: Int!
 }
