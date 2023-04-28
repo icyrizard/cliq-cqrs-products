@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ProductsModule } from './products/products.module';
 import { PrismaService } from './prisma.service';
+import { EventStoreModule } from '@juicycleff/nestjs-event-store';
 
 @Module({
   imports: [
@@ -13,6 +14,19 @@ import { PrismaService } from './prisma.service';
       autoSchemaFile: [process.cwd(), 'src/schema.gql'].join('/'),
     }),
     ProductsModule,
+    EventStoreModule.register({
+      type: 'event-store',
+      tcpEndpoint: {
+        host: 'localhost',
+        port: 1113,
+      },
+      options: {
+        defaultUserCredentials: {
+          username: 'admin',
+          password: 'changeit',
+        },
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

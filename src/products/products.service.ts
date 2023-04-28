@@ -11,11 +11,11 @@ export class ProductsService extends AggregateRoot {
   }
 
   async create(createProductInput: CreateProductInput) {
-    // this.apply(new CreateProductCommand(createProductInput));
-    // this.eventBus.publish(new CreateProductEvent(createProductInput));
-    return await this.commandBus.execute(
+    const result = await this.commandBus.execute(
       new CreateProductCommand(createProductInput),
     );
+
+    return result.model;
   }
 
   async findAll() {
