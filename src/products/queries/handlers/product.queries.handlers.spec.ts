@@ -11,8 +11,6 @@ import { FindAllProductsHandler } from './find-all-products.handler';
 import { FindAllProductsQuery } from '../impl/find-all-products.query';
 
 describe('ProductCommands', function () {
-  let commandBus: CommandBus;
-  let eventBus: EventBus;
   let queryBus: QueryBus;
   let repository: ProductsRepository;
   let findProductByIdQueryHandler: FindByIdProductsHandler;
@@ -31,8 +29,6 @@ describe('ProductCommands', function () {
       ],
     }).compile();
 
-    commandBus = module.get<CommandBus>(CommandBus);
-    eventBus = module.get<EventBus>(EventBus);
     queryBus = module.get<QueryBus>(QueryBus);
     repository = module.get<ProductsRepository>(ProductsRepository);
 
