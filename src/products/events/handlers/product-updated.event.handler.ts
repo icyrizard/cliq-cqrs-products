@@ -12,6 +12,6 @@ export class ProductUpdatedEventHandler
   async handle(event: ProductCreatedEvent) {
     const { id } = event;
 
-    await this.productsRepository.logEvent(id, 'ProductUpdatedEvent');
+    await this.productsRepository.logEvent(id, 'updated');
   }
 }

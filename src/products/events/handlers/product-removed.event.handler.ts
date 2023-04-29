@@ -11,6 +11,6 @@ export class ProductRemovedEventHandler
   async handle(event: ProductRemovedEvent) {
     const { id } = event;
 
-    await this.productsRepository.logEvent(id, 'ProductRemovedEvent');
+    await this.productsRepository.logEvent(id, 'removed');
   }
 }

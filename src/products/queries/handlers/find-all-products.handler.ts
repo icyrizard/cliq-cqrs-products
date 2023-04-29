@@ -10,6 +10,6 @@ export class FindAllProductsHandler
   constructor(private productsRepository: ProductsRepository) {}
 
   async execute(query: FindAllProductsQuery): Promise<Product[]> {
-    return this.productsRepository.findAll();
+    return this.productsRepository.findAll(query);
   }
 }

@@ -10,7 +10,6 @@ export class FindByIdProductsHandler
   constructor(private productsRepository: ProductsRepository) {}
 
   async execute(query: FindByIdProductQuery): Promise<Product> {
-    console.log('FindByIdProductQuery', query);
     const { id } = query;
 
     return this.productsRepository.findOne(id);

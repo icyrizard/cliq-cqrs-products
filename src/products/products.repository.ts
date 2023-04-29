@@ -3,6 +3,7 @@ import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { Injectable } from '@nestjs/common';
 import { ApiError } from '../exceptions/ApiError';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProductsRepository {
@@ -14,8 +15,10 @@ export class ProductsRepository {
     });
   }
 
-  async findAll() {
-    return await this.prisma.product.findMany();
+  async findAll(query: Prisma.ProductWhereInput) {
+    return await this.prisma.product.findMany({
+      where: query,
+    });
   }
 
   async findOne(id: number) {
