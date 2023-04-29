@@ -35,7 +35,6 @@ describe('ProductCommands', function () {
       providers: [
         ...ProductEventHandlers,
         ...ProductCommandHandlers,
-        ...ProductQueryHandlers,
         PrismaService,
         ProductsRepository,
         EventBus,
