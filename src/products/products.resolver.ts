@@ -7,10 +7,7 @@ import { QueryBus } from '@nestjs/cqrs';
 
 @Resolver(() => Product)
 export class ProductsResolver {
-  constructor(
-    private readonly productsService: ProductsService,
-    private readonly queryBus: QueryBus,
-  ) {}
+  constructor(private readonly productsService: ProductsService) {}
 
   @Mutation(() => Product)
   async createProduct(
@@ -34,10 +31,7 @@ export class ProductsResolver {
   updateProduct(
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
   ) {
-    return this.productsService.update(
-      updateProductInput.id,
-      updateProductInput,
-    );
+    return this.productsService.update(updateProductInput);
   }
 
   @Mutation(() => Product)

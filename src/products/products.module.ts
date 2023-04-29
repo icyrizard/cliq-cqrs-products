@@ -14,9 +14,19 @@ import { ProductCreatedEvent } from './events/impl/product-created.event';
 
 import { ProductCreatedEventHandler } from './events/handlers/product-created.event.handler';
 import { ProductFactory } from './product.factory';
+import { FindAllProductsHandler } from './queries/handlers/find-all-products.handler';
+import { FindByIdProductQuery } from './queries/impl/find-by-id-product.query';
+import { FindByIdProductsHandler } from './queries/handlers/find-by-id-products.handler';
+import { UpdateProductHandler } from './commands/handlers/update-product.handler';
+import { ProductUpdatedEventHandler } from './events/handlers/product-updated.event.handler';
 
-export const CommandHandlers = [CreateProductHandler];
-export const EventHandlers = [ProductCreatedEventHandler];
+export const CommandHandlers = [CreateProductHandler, UpdateProductHandler];
+export const EventHandlers = [
+  ProductCreatedEventHandler,
+  ProductUpdatedEventHandler,
+];
+export const QueryHandlers = [FindAllProductsHandler, FindByIdProductsHandler];
+
 @Module({
   imports: [
     CqrsModule,
@@ -47,6 +57,7 @@ export const EventHandlers = [ProductCreatedEventHandler];
     PrismaService,
     ...CommandHandlers,
     ...EventHandlers,
+    ...QueryHandlers,
     ProductsRepository,
   ],
 })

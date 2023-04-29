@@ -4,6 +4,8 @@ import { UpdateProductInput } from './dto/update-product.input';
 import { AggregateRoot, CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateProductCommand } from './commands/impl/create-product.command';
 import { FindAllProductsQuery } from './queries/impl/find-all-products.query';
+import { FindByIdProductQuery } from './queries/impl/find-by-id-product.query';
+import { UpdateProductCommand } from './commands/impl/update-product.command';
 
 @Injectable()
 export class ProductsService extends AggregateRoot {
@@ -22,12 +24,13 @@ export class ProductsService extends AggregateRoot {
   }
 
   async findOne(id: number) {
-    return await this.queryBus.execute(new FindAllProductsQuery());
-    // return this.productRepository.findOne(id);
+    return await this.queryBus.execute(new FindByIdProductQuery(id));
   }
 
-  async update(id: number, updateProductInput: UpdateProductInput) {
-    // return this.productRepository.update(id, updateProductInput);
+  async update(updateProductInput: UpdateProductInput) {
+    return await this.commandBus.execute(
+      new UpdateProductCommand(updateProductInput),
+    );
   }
 
   async remove(id: number) {

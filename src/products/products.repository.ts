@@ -27,10 +27,9 @@ export class ProductsRepository {
   }
 
   async update(id: number, updateProductInput: UpdateProductInput) {
-    return await this.prisma.product.updateMany({
+    return await this.prisma.product.update({
       where: {
         id: id,
-        deletedAt: null,
       },
       data: updateProductInput,
     });

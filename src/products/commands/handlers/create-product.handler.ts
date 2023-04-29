@@ -22,15 +22,10 @@ export class CreateProductHandler
   async execute(command: CreateProductCommand) {
     const { data } = command;
 
-    // const createdProduct = new AggregateObject<Product>(
-    //   await this.productRepository.create(data),
-    // );
-
     const product = this.publisher.mergeObjectContext(
       await this.productFactory.create(data),
     );
 
-    console.log('product', product);
     product.commit();
 
     return product.data;
