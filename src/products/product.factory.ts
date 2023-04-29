@@ -16,8 +16,6 @@ export class ProductFactory {
 
     productAggregate.apply(new ProductCreatedEvent(productAggregate.data.id));
 
-    console.log('productAggregate', productAggregate);
-
     return productAggregate;
   }
 }

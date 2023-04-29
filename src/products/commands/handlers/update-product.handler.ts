@@ -28,11 +28,8 @@ export class UpdateProductHandler
 
     const product = await this.productRepository.update(id, data);
 
-    console.log('UpdateProductHandler=================');
-
     this.eventBus.publish(new ProductUpdatedEvent(id));
 
     return product;
-    // return await this.productRepository.findOne(id);
   }
 }

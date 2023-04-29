@@ -7,7 +7,6 @@ import { ProductsRepository } from '../../products.repository';
 import { PrismaService } from '../../../prisma.service';
 
 import { EventLog } from '@prisma/client';
-import { ProductsService } from '../../products.service';
 
 describe('ProductEventHandlers', function () {
   let productCreatedEventHandler: ProductCreatedEventHandler;

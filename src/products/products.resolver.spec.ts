@@ -13,9 +13,8 @@ import { CreateProductHandler } from './commands/handlers/create-product.handler
 import { Product } from '@prisma/client';
 import { UpdateProductHandler } from './commands/handlers/update-product.handler';
 import { ProductUpdatedEventHandler } from './events/handlers/product-updated.event.handler';
-import { omit, pick } from 'lodash';
+import { omit } from 'lodash';
 import { RemoveProductHandler } from './commands/handlers/remove-product.handler';
-import { ProductRemovedEvent } from './events/impl/product-removed.event';
 import { ProductRemovedEventHandler } from './events/handlers/product-removed.event.handler';
 
 describe('ProductsResolver', () => {
@@ -62,6 +61,8 @@ describe('ProductsResolver', () => {
 
     removeProductHandler =
       module.get<RemoveProductHandler>(RemoveProductHandler);
+
+    jest.spyOn(repository, 'logEvent').mockImplementation(() => null);
   });
 
   it('should trigger the correct commands and events when triggering createProduct', async () => {
@@ -89,7 +90,7 @@ describe('ProductsResolver', () => {
     eventBus.register([ProductCreatedEventHandler]);
 
     const spy = jest
-      .spyOn(service, 'create')
+      .spyOn(repository, 'create')
       .mockImplementation(() => Promise.resolve(newProduct));
 
     expect(await resolver.createProduct(data)).toBe(newProduct);
@@ -145,7 +146,7 @@ describe('ProductsResolver', () => {
       deletedAt: null,
     };
 
-    const data = pick(toDeleteProduct, ['id']);
+    const data = toDeleteProduct.id;
 
     jest.spyOn(removeProductHandler, 'execute');
 
@@ -155,6 +156,11 @@ describe('ProductsResolver', () => {
     const spy = jest
       .spyOn(repository, 'remove')
       .mockImplementation(() => Promise.resolve(toDeleteProduct));
+
+    // jest.spyOn(repository, 'logEvent').mockImplementation(() => {
+    //   id: 1,
+    //     name: 'Log',
+    // });
 
     expect(await resolver.removeProduct(data)).toBe(toDeleteProduct);
 
