@@ -46,4 +46,14 @@ export class ProductsRepository {
       },
     });
   }
+
+  async logEvent(id: number, name: string) {
+    return await this.prisma.eventLog.create({
+      data: {
+        name: name,
+        modelId: id,
+        modelName: 'Product',
+      },
+    });
+  }
 }

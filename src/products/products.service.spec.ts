@@ -4,7 +4,7 @@ import { Product } from './entities/product.entity';
 import { PrismaService } from '../prisma.service';
 import { ProductsRepository } from './products.repository';
 import { CommandBus, EventBus } from '@nestjs/cqrs';
-import { Model } from './entities/Model';
+import { AggregateObject } from './entities/AggregateObject';
 
 describe('ProductsService', () => {
   let service: ProductsService;
@@ -24,7 +24,7 @@ describe('ProductsService', () => {
   });
 
   it('should create a product', () => {
-    const newProduct: Model<Product> = new Model<Product>({
+    const newProduct: AggregateObject<Product> = new AggregateObject<Product>({
       id: 1,
       name: 'Product 1',
       price: 9.99,

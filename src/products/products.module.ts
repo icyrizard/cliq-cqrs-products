@@ -5,35 +5,43 @@ import { PrismaService } from '../prisma.service';
 import { ProductsRepository } from './products.repository';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreateProductHandler } from './commands/handlers/create-product.handler';
-import { ProductCreatedEventHandler } from './events/handlers/product-created.handler';
+
 import {
   EventStoreModule,
   EventStoreSubscriptionType,
 } from '@juicycleff/nestjs-event-store';
-import { ProductCreatedEvent } from './events/logic/product-created.event';
+import { ProductCreatedEvent } from './events/impl/product-created.event';
+
+import { ProductCreatedEventHandler } from './events/handlers/product-created.event.handler';
+import { ProductFactory } from './product.factory';
 
 export const CommandHandlers = [CreateProductHandler];
 export const EventHandlers = [ProductCreatedEventHandler];
-
 @Module({
   imports: [
     CqrsModule,
-    EventStoreModule.registerFeature({
-      type: 'event-store',
-      featureStreamName: '$svc-product',
-      subscriptions: [
-        {
-          type: EventStoreSubscriptionType.Persistent,
-          stream: '$svc-product',
-          persistentSubscriptionName: 'product',
-        },
-      ],
-      eventHandlers: {
-        ProductCreatedEvent: (data) => new ProductCreatedEvent(data),
-      },
-    }),
+    // EventStoreModule.registerFeature({
+    //   type: 'event-store',
+    //   featureStreamName: '$svc-product',
+    //   subscriptions: [
+    //     {
+    //       type: EventStoreSubscriptionType.Persistent,
+    //       stream: '$svc-product',
+    //       persistentSubscriptionName: 'product',
+    //     },
+    //   ],
+    //   eventHandlers: {
+    //     // ProductCreatedEvent: ProductCreatedEventHandler,
+    //     // ...EventHandlers,
+    //     ProductCreatedEvent: (data) => () => {
+    //       console.log(data);
+    //       new ProductCreatedEvent(data);
+    //     },
+    //   },
+    // }),
   ],
   providers: [
+    ProductFactory,
     ProductsResolver,
     ProductsService,
     PrismaService,

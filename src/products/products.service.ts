@@ -1,28 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
-import { AggregateRoot, CommandBus } from '@nestjs/cqrs';
-import { CreateProductCommand } from './commands/logic/create-product.command';
+import { AggregateRoot, CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CreateProductCommand } from './commands/impl/create-product.command';
+import { FindAllProductsQuery } from './queries/impl/find-all-products.query';
 
 @Injectable()
 export class ProductsService extends AggregateRoot {
-  constructor(private commandBus: CommandBus) {
+  constructor(private commandBus: CommandBus, private queryBus: QueryBus) {
     super();
   }
 
   async create(createProductInput: CreateProductInput) {
-    const result = await this.commandBus.execute(
+    return await this.commandBus.execute(
       new CreateProductCommand(createProductInput),
     );
-
-    return result.model;
   }
 
   async findAll() {
-    // return this.productRepository.findAll();
+    return await this.queryBus.execute(new FindAllProductsQuery());
   }
 
   async findOne(id: number) {
+    return await this.queryBus.execute(new FindAllProductsQuery());
     // return this.productRepository.findOne(id);
   }
 
