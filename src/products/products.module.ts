@@ -6,25 +6,26 @@ import { ProductsRepository } from './products.repository';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreateProductHandler } from './commands/handlers/create-product.handler';
 
-import {
-  EventStoreModule,
-  EventStoreSubscriptionType,
-} from '@juicycleff/nestjs-event-store';
-import { ProductCreatedEvent } from './events/impl/product-created.event';
-
 import { ProductCreatedEventHandler } from './events/handlers/product-created.event.handler';
 import { ProductFactory } from './product.factory';
 import { FindAllProductsHandler } from './queries/handlers/find-all-products.handler';
-import { FindByIdProductQuery } from './queries/impl/find-by-id-product.query';
 import { FindByIdProductsHandler } from './queries/handlers/find-by-id-products.handler';
 import { UpdateProductHandler } from './commands/handlers/update-product.handler';
 import { ProductUpdatedEventHandler } from './events/handlers/product-updated.event.handler';
+import { ProductRemovedEventHandler } from './events/handlers/product-removed.event.handler';
+import { RemoveProductHandler } from './commands/handlers/remove-product.handler';
 
-export const CommandHandlers = [CreateProductHandler, UpdateProductHandler];
+export const CommandHandlers = [
+  CreateProductHandler,
+  UpdateProductHandler,
+  RemoveProductHandler,
+];
 export const EventHandlers = [
   ProductCreatedEventHandler,
   ProductUpdatedEventHandler,
+  ProductRemovedEventHandler,
 ];
+
 export const QueryHandlers = [FindAllProductsHandler, FindByIdProductsHandler];
 
 @Module({

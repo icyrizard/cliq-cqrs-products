@@ -2,6 +2,7 @@ import { PrismaService } from '../prisma.service';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { Injectable } from '@nestjs/common';
+import { ApiError } from '../exceptions/ApiError';
 
 @Injectable()
 export class ProductsRepository {
@@ -27,23 +28,28 @@ export class ProductsRepository {
   }
 
   async update(id: number, updateProductInput: UpdateProductInput) {
-    return await this.prisma.product.update({
-      where: {
-        id: id,
-      },
-      data: updateProductInput,
-    });
+    try {
+      return await this.prisma.product.update({
+        where: {
+          id: id,
+        },
+        data: updateProductInput,
+      });
+    } catch (error) {
+      throw new ApiError(409, 'Unable to update this product');
+    }
   }
 
   async remove(id: number) {
-    return await this.prisma.product.update({
-      where: {
-        id: id,
-      },
-      data: {
-        deletedAt: null,
-      },
-    });
+    try {
+      return await this.prisma.product.delete({
+        where: {
+          id: id,
+        },
+      });
+    } catch (error) {
+      throw new ApiError(409, 'Unable to remove this product');
+    }
   }
 
   async logEvent(id: number, name: string) {

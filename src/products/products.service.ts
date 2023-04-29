@@ -6,6 +6,7 @@ import { CreateProductCommand } from './commands/impl/create-product.command';
 import { FindAllProductsQuery } from './queries/impl/find-all-products.query';
 import { FindByIdProductQuery } from './queries/impl/find-by-id-product.query';
 import { UpdateProductCommand } from './commands/impl/update-product.command';
+import { RemoveProductCommand } from './commands/impl/remove-product.command';
 
 @Injectable()
 export class ProductsService extends AggregateRoot {
@@ -34,6 +35,6 @@ export class ProductsService extends AggregateRoot {
   }
 
   async remove(id: number) {
-    // return this.productRepository.remove(id);
+    return await this.commandBus.execute(new RemoveProductCommand(id));
   }
 }

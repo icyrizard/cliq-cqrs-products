@@ -1,9 +1,4 @@
-import {
-  CommandHandler,
-  EventBus,
-  EventPublisher,
-  ICommandHandler,
-} from '@nestjs/cqrs';
+import { CommandHandler, EventBus, EventPublisher, ICommandHandler, } from '@nestjs/cqrs';
 
 import { ProductFactory } from '../../product.factory';
 import { ProductsRepository } from '../../products.repository';

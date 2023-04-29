@@ -12,8 +12,6 @@ export class ProductCreatedEventHandler
   async handle(event: ProductCreatedEvent) {
     const { id } = event;
 
-    console.log('ProductCreatedEvent ========', event);
-
     await this.productsRepository.logEvent(id, 'ProductCreatedEvent');
   }
 }
