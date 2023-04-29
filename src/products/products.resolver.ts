@@ -29,6 +29,7 @@ export class ProductsResolver {
   updateProduct(
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
   ) {
+    console.log('yoooooooooo');
     return this.productsService.update(updateProductInput);
   }
 

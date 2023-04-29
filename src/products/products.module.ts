@@ -5,26 +5,19 @@ import { PrismaService } from '../prisma.service';
 import { ProductsRepository } from './products.repository';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreateProductHandler } from './commands/handlers/create-product.handler';
-
-import { ProductCreatedEventHandler } from './events/handlers/product-created.event.handler';
 import { ProductFactory } from './product.factory';
 import { FindAllProductsHandler } from './queries/handlers/find-all-products.handler';
 import { FindByIdProductsHandler } from './queries/handlers/find-by-id-products.handler';
 import { UpdateProductHandler } from './commands/handlers/update-product.handler';
-import { ProductUpdatedEventHandler } from './events/handlers/product-updated.event.handler';
-import { ProductRemovedEventHandler } from './events/handlers/product-removed.event.handler';
 import { RemoveProductHandler } from './commands/handlers/remove-product.handler';
+import { ProductEventHandlers } from './events/handlers';
 
 export const CommandHandlers = [
   CreateProductHandler,
   UpdateProductHandler,
   RemoveProductHandler,
 ];
-export const EventHandlers = [
-  ProductCreatedEventHandler,
-  ProductUpdatedEventHandler,
-  ProductRemovedEventHandler,
-];
+export const EventHandlers = ProductEventHandlers;
 
 export const QueryHandlers = [FindAllProductsHandler, FindByIdProductsHandler];
 

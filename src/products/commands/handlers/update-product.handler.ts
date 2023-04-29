@@ -1,4 +1,9 @@
-import { CommandHandler, EventBus, EventPublisher, ICommandHandler, } from '@nestjs/cqrs';
+import {
+  CommandHandler,
+  EventBus,
+  EventPublisher,
+  ICommandHandler,
+} from '@nestjs/cqrs';
 
 import { ProductFactory } from '../../product.factory';
 import { ProductsRepository } from '../../products.repository';
@@ -22,6 +27,8 @@ export class UpdateProductHandler
     const { id } = data;
 
     const product = await this.productRepository.update(id, data);
+
+    console.log('UpdateProductHandler=================');
 
     this.eventBus.publish(new ProductUpdatedEvent(id));
 
