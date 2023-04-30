@@ -1,6 +1,6 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ProductUpdatedEvent } from '../impl/product-updated.event';
-import { EventStoreService } from '../../../eventStore.service';
+import { EventStoreService } from '../../../event-store.service';
 
 @EventsHandler(ProductUpdatedEvent)
 export class ProductUpdatedEventHandler

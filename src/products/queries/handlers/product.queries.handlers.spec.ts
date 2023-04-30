@@ -9,7 +9,10 @@ import { ProductQueryHandlers } from './index';
 import { FindAllProductsHandler } from './find-all-products.handler';
 import { FindAllProductsQuery } from '../impl/find-all-products.query';
 
-import { EventStoreData, EventStoreService } from '../../../eventStore.service';
+import {
+  EventStoreData,
+  EventStoreService,
+} from '../../../event-store.service';
 
 describe('ProductCommands', function () {
   let queryBus: QueryBus;

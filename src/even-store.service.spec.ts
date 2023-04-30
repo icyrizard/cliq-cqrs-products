@@ -1,5 +1,5 @@
 import { Product } from './products/entities/product.entity';
-import { DataWithId, EventStoreService } from './eventStore.service';
+import { DataWithId, EventStoreService } from './event-store.service';
 
 describe('EventStore', () => {
   let eventStore: EventStoreService;

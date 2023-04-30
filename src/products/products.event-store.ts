@@ -1,7 +1,7 @@
 import { UpdateProductInput } from './dto/update-product.input';
 import { Injectable } from '@nestjs/common';
 import { ApiError } from '../exceptions/ApiError';
-import { EventStoreService } from '../eventStore.service';
+import { EventStoreService } from '../event-store.service';
 import { Product } from './entities/product.entity';
 import { CreateProductInputWithId } from './dto/create-product.input';
 

@@ -6,7 +6,7 @@ import { ProductCreatedEventHandler } from './product-created.event.handler';
 import { ProductsRepository } from '../../products.repository';
 import { PrismaService } from '../../../prisma.service';
 
-import { EventStoreService } from '../../../eventStore.service';
+import { EventStoreService } from '../../../event-store.service';
 import { CreateProductInputWithId } from '../../dto/create-product.input';
 import { ProductUpdatedEventHandler } from './product-updated.event.handler';
 import { ProductUpdatedEvent } from '../impl/product-updated.event';

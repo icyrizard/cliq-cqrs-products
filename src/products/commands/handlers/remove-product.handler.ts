@@ -1,13 +1,7 @@
-import {
-  CommandHandler,
-  EventBus,
-  EventPublisher,
-  ICommandHandler,
-} from '@nestjs/cqrs';
+import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ProductsRepository } from '../../products.repository';
-import { ProductRemovedEvent } from '../../events/impl/product-removed.event';
 import { RemoveProductCommand } from '../impl/remove-product.command';
-import { EventStoreService } from '../../../eventStore.service';
+import { EventStoreService } from '../../../event-store.service';
 
 @CommandHandler(RemoveProductCommand)
 export class RemoveProductHandler

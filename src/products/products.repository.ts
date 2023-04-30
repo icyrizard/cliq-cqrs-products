@@ -2,7 +2,7 @@ import { CreateProductInputWithId } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { Injectable } from '@nestjs/common';
 import { Product } from './entities/product.entity';
-import { EventStoreService } from '../eventStore.service';
+import { EventStoreService } from '../event-store.service';
 
 @Injectable()
 export class ProductsRepository {

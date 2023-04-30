@@ -11,13 +11,15 @@ import { ProductCreatedEventHandler } from '../../events/handlers/product-create
 import { ProductCommandHandlers } from './index';
 import { UpdateProductHandler } from './update-product.handler';
 import { RemoveProductHandler } from './remove-product.handler';
-import { EventStoreData, EventStoreService } from '../../../eventStore.service';
+import {
+  EventStoreData,
+  EventStoreService,
+} from '../../../event-store.service';
 import { ProductsEventStore } from '../../products.event-store';
 import { ProductUpdatedEventHandler } from '../../events/handlers/product-updated.event.handler';
 import { UpdateProductCommand } from '../impl/update-product.command';
 import { ProductRemovedEventHandler } from '../../events/handlers/product-removed.event.handler';
 import { RemoveProductCommand } from '../impl/remove-product.command';
-import { Product } from '../../entities/product.entity';
 
 import { CreateProductInputWithId } from '../../dto/create-product.input';
 import { UpdateProductInput } from '../../dto/update-product.input';
