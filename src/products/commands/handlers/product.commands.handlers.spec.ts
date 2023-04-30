@@ -2,11 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CommandBus, EventBus, EventPublisher } from '@nestjs/cqrs';
 
 import { ProductsRepository } from '../../products.repository';
-import { PrismaService } from '../../../prisma.service';
 
 import { CreateProductCommand } from '../impl/create-product.command';
 import { CreateProductHandler } from './create-product.handler';
-import { ProductFactory } from '../../product.factory';
 import { ProductCreatedEventHandler } from '../../events/handlers/product-created.event.handler';
 import { ProductCommandHandlers } from './index';
 import { UpdateProductHandler } from './update-product.handler';
@@ -15,7 +13,6 @@ import {
   EventStoreData,
   EventStoreService,
 } from '../../../event-store.service';
-import { ProductsEventStore } from '../../products.event-store';
 import { ProductUpdatedEventHandler } from '../../events/handlers/product-updated.event.handler';
 import { UpdateProductCommand } from '../impl/update-product.command';
 import { ProductRemovedEventHandler } from '../../events/handlers/product-removed.event.handler';
@@ -42,14 +39,11 @@ describe('ProductCommands', function () {
       providers: [
         ...ProductEventHandlers,
         ...ProductCommandHandlers,
-        PrismaService,
         ProductsRepository,
         EventBus,
         CommandBus,
-        ProductFactory,
         EventPublisher,
         EventStoreService,
-        ProductsEventStore,
         EventStoreService,
       ],
     }).compile();

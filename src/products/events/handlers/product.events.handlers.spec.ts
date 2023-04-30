@@ -4,7 +4,6 @@ import { CommandBus, EventBus } from '@nestjs/cqrs';
 import { ProductCreatedEvent } from '../impl/product-created.event';
 import { ProductCreatedEventHandler } from './product-created.event.handler';
 import { ProductsRepository } from '../../products.repository';
-import { PrismaService } from '../../../prisma.service';
 
 import { EventStoreService } from '../../../event-store.service';
 import { CreateProductInputWithId } from '../../dto/create-product.input';
@@ -24,7 +23,6 @@ describe('ProductEventHandlers', function () {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ...ProductEventHandlers,
-        PrismaService,
         ProductsRepository,
         EventBus,
         CommandBus,

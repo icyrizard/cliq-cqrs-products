@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CommandBus, EventBus, EventPublisher, QueryBus } from '@nestjs/cqrs';
 
 import { ProductsRepository } from '../../products.repository';
-import { PrismaService } from '../../../prisma.service';
 import { FindByIdProductQuery } from '../impl/find-by-id-product.query';
 import { FindByIdProductsHandler } from './find-by-id-products.handler';
 import { ProductQueryHandlers } from './index';
@@ -25,7 +24,6 @@ describe('ProductCommands', function () {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ...ProductQueryHandlers,
-        PrismaService,
         ProductsRepository,
         EventBus,
         CommandBus,

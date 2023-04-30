@@ -29,21 +29,20 @@ ARG NODE_ENV
 ENV NODE_ENV $NODE_ENV
 
 RUN addgroup -g 1001 -S nodejs
-RUN adduser -S alanode -u 1001
+RUN adduser -S cliq -u 1001
 
-# RUN chown alanode:nodejs /app
+# RUN chown cliq:nodejs /app
 
 COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/entrypoint.sh ./
 
-RUN chown -R alanode:nodejs /usr/local/bin/pm2
-RUN chown -R alanode:nodejs /usr/local/bin/pm2-runtime
+RUN chown -R cliq:nodejs /usr/local/bin/pm2
+RUN chown -R cliq:nodejs /usr/local/bin/pm2-runtime
 
 EXPOSE 80
-# USER alanode
+# USER cliq
 
 RUN npm run prisma:init
 

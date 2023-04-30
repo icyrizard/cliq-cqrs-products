@@ -1,6 +1,4 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-
-import { ProductFactory } from '../../product.factory';
 import { ProductsRepository } from '../../products.repository';
 import { UpdateProductCommand } from '../impl/update-product.command';
 
@@ -10,7 +8,6 @@ export class UpdateProductHandler
 {
   constructor(
     private readonly productRepository: ProductsRepository,
-    private productFactory: ProductFactory,
     private publisher: EventPublisher,
   ) {}
 

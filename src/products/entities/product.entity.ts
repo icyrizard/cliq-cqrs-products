@@ -1,4 +1,4 @@
-import { ObjectType, Field, Float, Int } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { AggregateRoot } from '@nestjs/cqrs';
 import { ProductCreatedEvent } from '../events/impl/product-created.event';
 import { CreateProductInputWithId } from '../dto/create-product.input';

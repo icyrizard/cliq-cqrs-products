@@ -1,7 +1,6 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { CreateProductCommand } from '../impl/create-product.command';
-import { ProductFactory } from '../../product.factory';
 import { ProductsRepository } from '../../products.repository';
 
 @CommandHandler(CreateProductCommand)
@@ -9,7 +8,6 @@ export class CreateProductHandler
   implements ICommandHandler<CreateProductCommand>
 {
   constructor(
-    private productFactory: ProductFactory,
     private productRepository: ProductsRepository,
     private publisher: EventPublisher,
   ) {}
