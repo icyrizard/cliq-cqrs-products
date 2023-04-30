@@ -1,5 +1,4 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { ProductsRepository } from '../../products.repository';
 import { ProductUpdatedEvent } from '../impl/product-updated.event';
 import { EventStoreService } from '../../../eventStore.service';
 
@@ -15,8 +14,6 @@ export class ProductUpdatedEventHandler
     const { id } = data;
 
     await this.eventStore.update(id, 'ProductUpdatedEvent', data);
-
-    console.log('ProductUpdatedEvent', this.eventStore.findMany());
 
     return data;
   }

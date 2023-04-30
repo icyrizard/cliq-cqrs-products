@@ -1,5 +1,5 @@
 import { Product } from './products/entities/product.entity';
-import { EventStoreService } from './eventStore.service';
+import { DataWithId, EventStoreService } from './eventStore.service';
 
 describe('EventStore', () => {
   let eventStore: EventStoreService;
@@ -9,7 +9,8 @@ describe('EventStore', () => {
   });
 
   it('should store an object', async () => {
-    const newProduct: Partial<Product> = {
+    const newProduct: DataWithId = {
+      id: Math.random().toString(),
       name: 'Product 1',
       price: 9.99,
       description: 'Product description',
@@ -26,7 +27,8 @@ describe('EventStore', () => {
   });
 
   it('to retrieve an object by id', async () => {
-    const newProduct: Partial<Product> = {
+    const newProduct: DataWithId = {
+      id: Math.random().toString(),
       name: 'Product 1',
       price: 9.99,
       description: 'Product description',
@@ -47,7 +49,8 @@ describe('EventStore', () => {
   });
 
   it('should update an object', async () => {
-    const newProduct: Partial<Product> = {
+    const newProduct: DataWithId = {
+      id: Math.random().toString(),
       name: 'Product 1',
       price: 9.99,
       description: 'Product description',
@@ -78,8 +81,6 @@ describe('EventStore', () => {
     expect(latest).not.toBeNull();
     expect(latest).toEqual(expect.objectContaining(updatedProduct));
 
-    console.log({ latest });
-
     const store = await eventStore.getStore();
     const allRecordsWithId = store.get(id);
 
@@ -92,6 +93,7 @@ describe('EventStore', () => {
 
   it('retrieve many objects', async () => {
     await eventStore.create('product', 'ProductCreatedEvent', {
+      id: Math.random().toString(),
       name: 'Product 1',
       price: 9.99,
       description: 'Product description',
@@ -99,6 +101,7 @@ describe('EventStore', () => {
     });
 
     await eventStore.create('product', 'ProductCreatedEvent', {
+      id: Math.random().toString(),
       name: 'Product 2',
       price: 42,
       description: 'Product description',
@@ -107,14 +110,13 @@ describe('EventStore', () => {
 
     const products = await eventStore.findMany();
 
-    console.log({ products });
-
     expect(products).not.toBeNull();
     expect(products).not.toHaveLength(1);
   });
 
   it('should delete an object', async () => {
     const product = await eventStore.create('product', 'ProductCreated', {
+      id: Math.random().toString(),
       name: 'Product 1',
       price: 9.99,
       description: 'Product description',

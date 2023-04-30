@@ -1,7 +1,13 @@
-import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import {
+  CommandHandler,
+  EventBus,
+  EventPublisher,
+  ICommandHandler,
+} from '@nestjs/cqrs';
 import { ProductsRepository } from '../../products.repository';
 import { ProductRemovedEvent } from '../../events/impl/product-removed.event';
 import { RemoveProductCommand } from '../impl/remove-product.command';
+import { EventStoreService } from '../../../eventStore.service';
 
 @CommandHandler(RemoveProductCommand)
 export class RemoveProductHandler
@@ -9,16 +15,21 @@ export class RemoveProductHandler
 {
   constructor(
     private productRepository: ProductsRepository,
-    private eventBus: EventBus,
+    private publisher: EventPublisher,
+    private eventStore: EventStoreService,
   ) {}
 
   async execute(command: RemoveProductCommand) {
     const { id } = command;
 
-    // const product = await this.productRepository.remove(id);
+    const productToDelete = await this.eventStore.findByIdOrThrow(id);
 
-    this.eventBus.publish(new ProductRemovedEvent(id));
+    const product = this.publisher.mergeObjectContext(
+      await this.productRepository.remove(id),
+    );
 
-    // return product;
+    product.commit();
+
+    return productToDelete;
   }
 }

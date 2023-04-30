@@ -1,19 +1,18 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-// import crypto from 'crypto';
-import { ApiError } from './exceptions/ApiError';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const base32 = require('base32');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const crypto = require('crypto');
-
 import { isEmpty } from 'lodash';
 
 export interface EventStoreData {
   id: string;
   type: string;
+  eventType: string;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
+  [key: string]: any;
+}
+
+export interface DataWithId {
+  id: string;
   [key: string]: any;
 }
 
@@ -33,11 +32,8 @@ export class EventStoreService implements OnModuleInit {
     return this.store;
   }
 
-  async create(type: string, eventType: string, data: any) {
-    const newId = base32.encode(crypto.randomBytes(10));
-
+  async create(type: string, eventType: string, data: DataWithId) {
     const newData = {
-      id: newId,
       ...data,
       type: type,
       eventType: eventType,
@@ -46,7 +42,9 @@ export class EventStoreService implements OnModuleInit {
       deletedAt: null,
     };
 
-    this.store.set(newId, [newData]);
+    const { id } = newData;
+
+    this.store.set(id, [newData]);
 
     return newData;
   }
@@ -64,8 +62,11 @@ export class EventStoreService implements OnModuleInit {
   async findByIdOrThrow(id: string) {
     const data = this.store.get(id);
 
-    if (!data || data.at(-1).deletedAt) {
-      throw new ApiError(404, 'Not found');
+    if (isEmpty(data) || data.at(-1).deletedAt) {
+      // throw new HttpException('Not found', HttpStatus.FORBIDDEN);
+      console.log('Not found', id, data);
+
+      return;
     }
 
     return data.at(-1);
@@ -75,6 +76,9 @@ export class EventStoreService implements OnModuleInit {
     const currentData = this.store.get(id) || [];
 
     if (isEmpty(currentData) || currentData.at(-1).deletedAt) {
+      console.log('Not found for update', id, currentData);
+      // throw new HttpException('Not found', HttpStatus.FORBIDDEN);
+      return;
     }
 
     const newData = {
@@ -102,8 +106,10 @@ export class EventStoreService implements OnModuleInit {
   async remove(id: string, eventType: string) {
     const currentData = this.store.get(id) || [];
 
-    if (currentData.at(-1).deletedAt) {
-      throw new ApiError(409, 'Already deleted');
+    if (isEmpty(currentData) || currentData.at(-1).deletedAt) {
+      console.log('Not found for removal', id, currentData);
+      // throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+      return;
     }
 
     const newData = {

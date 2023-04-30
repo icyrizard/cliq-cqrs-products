@@ -3,6 +3,7 @@ import { AggregateRoot } from '@nestjs/cqrs';
 import { ProductCreatedEvent } from '../events/impl/product-created.event';
 import { CreateProductInputWithId } from '../dto/create-product.input';
 import { ProductUpdatedEvent } from '../events/impl/product-updated.event';
+import { ProductRemovedEvent } from '../events/impl/product-removed.event';
 
 @ObjectType()
 export class Product extends AggregateRoot {
@@ -39,5 +40,9 @@ export class Product extends AggregateRoot {
 
   update() {
     this.apply(new ProductUpdatedEvent(this.data));
+  }
+
+  remove() {
+    this.apply(new ProductRemovedEvent(this.id));
   }
 }

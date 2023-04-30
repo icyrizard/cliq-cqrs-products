@@ -41,8 +41,13 @@ export class ProductsRepository {
     return product;
   }
 
-  async remove(id: string, eventType: string) {
-    return await this.eventStoreService.remove(id, eventType);
+  async remove(id: string) {
+    const product = new Product();
+
+    product.id = id;
+    product.remove();
+
+    return product;
 
     // try {
     //   return await this.prisma.product.delete({
