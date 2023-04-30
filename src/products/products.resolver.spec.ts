@@ -62,7 +62,7 @@ describe('ProductsResolver', () => {
     removeProductHandler =
       module.get<RemoveProductHandler>(RemoveProductHandler);
 
-    jest.spyOn(repository, 'logEvent').mockImplementation(() => null);
+    // jest.spyOn(repository, 'logEvent').mockImplementation(() => null);
   });
 
   // it('should trigger the correct commands and events when triggering createProduct', async () => {

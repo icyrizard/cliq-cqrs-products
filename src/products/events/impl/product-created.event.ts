@@ -1,6 +1,5 @@
-import { Product } from '../../entities/product.entity';
-import { AggregateObject } from '../../entities/AggregateObject';
+import { CreateProductInputWithId } from '../../dto/create-product.input';
 
 export class ProductCreatedEvent {
-  constructor(public readonly product: AggregateObject<Product>) {}
+  constructor(public readonly data: CreateProductInputWithId) {}
 }

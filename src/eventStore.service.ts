@@ -1,10 +1,12 @@
-import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+// import crypto from 'crypto';
+import { ApiError } from './exceptions/ApiError';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const base32 = require('base32');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const crypto = require('crypto');
-// import crypto from 'crypto';
-import { ApiError } from './exceptions/ApiError';
+
+import { isEmpty } from 'lodash';
 
 export interface EventStoreData {
   id: string;
@@ -72,6 +74,9 @@ export class EventStoreService implements OnModuleInit {
   async update(id: string, eventType: string, data: any) {
     const currentData = this.store.get(id) || [];
 
+    if (isEmpty(currentData) || currentData.at(-1).deletedAt) {
+    }
+
     const newData = {
       id: id,
       ...currentData.at(0),
@@ -94,7 +99,7 @@ export class EventStoreService implements OnModuleInit {
     }));
   }
 
-  async remove(id: string) {
+  async remove(id: string, eventType: string) {
     const currentData = this.store.get(id) || [];
 
     if (currentData.at(-1).deletedAt) {
@@ -103,6 +108,7 @@ export class EventStoreService implements OnModuleInit {
 
     const newData = {
       id: id,
+      eventType: eventType,
       ...currentData.at(0),
       deletedAt: new Date(),
     };

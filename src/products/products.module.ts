@@ -12,6 +12,7 @@ import { UpdateProductHandler } from './commands/handlers/update-product.handler
 import { RemoveProductHandler } from './commands/handlers/remove-product.handler';
 import { ProductEventHandlers } from './events/handlers';
 import { EventStoreService } from '../eventStore.service';
+import { ProductsEventStore } from './products.event-store';
 
 export const CommandHandlers = [
   CreateProductHandler,
@@ -46,6 +47,7 @@ export const QueryHandlers = [FindAllProductsHandler, FindByIdProductsHandler];
     // }),
   ],
   providers: [
+    ProductsRepository,
     ProductFactory,
     ProductsResolver,
     ProductsService,
@@ -53,8 +55,8 @@ export const QueryHandlers = [FindAllProductsHandler, FindByIdProductsHandler];
     ...CommandHandlers,
     ...EventHandlers,
     ...QueryHandlers,
-    ProductsRepository,
     EventStoreService,
+    ProductsEventStore,
   ],
 })
 export class ProductsModule {}

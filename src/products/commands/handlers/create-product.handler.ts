@@ -2,6 +2,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { CreateProductCommand } from '../impl/create-product.command';
 import { ProductFactory } from '../../product.factory';
+import { ProductsRepository } from '../../products.repository';
 
 @CommandHandler(CreateProductCommand)
 export class CreateProductHandler
@@ -9,6 +10,7 @@ export class CreateProductHandler
 {
   constructor(
     private productFactory: ProductFactory,
+    private productRepository: ProductsRepository,
     private publisher: EventPublisher,
   ) {}
 
@@ -16,11 +18,11 @@ export class CreateProductHandler
     const { data } = command;
 
     const product = this.publisher.mergeObjectContext(
-      await this.productFactory.create(data),
+      await this.productRepository.create(data),
     );
 
     product.commit();
 
-    return product.data;
+    return product.getData();
   }
 }

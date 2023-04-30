@@ -1,7 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { FindAllProductsQuery } from '../impl/find-all-products.query';
 import { ProductsRepository } from '../../products.repository';
-import { Product } from '../../entities/product.entity';
 
 @QueryHandler(FindAllProductsQuery)
 export class FindAllProductsHandler
@@ -9,7 +8,7 @@ export class FindAllProductsHandler
 {
   constructor(private productsRepository: ProductsRepository) {}
 
-  async execute(query: FindAllProductsQuery): Promise<Product[]> {
-    return this.productsRepository.findAll(query);
+  async execute(query: FindAllProductsQuery) {
+    return this.productsRepository.findAll();
   }
 }

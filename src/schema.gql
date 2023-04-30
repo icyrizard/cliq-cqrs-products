@@ -4,7 +4,7 @@
 
 type Product {
   """Id of the product"""
-  id: Int!
+  id: String!
 
   """UUId of the product"""
   name: String!
@@ -35,13 +35,13 @@ scalar DateTime
 
 type Query {
   products: [Product!]!
-  product(id: Int!): Product!
+  product(id: String!): Product!
 }
 
 type Mutation {
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(updateProductInput: UpdateProductInput!): Product!
-  removeProduct(id: Int!): Product!
+  removeProduct(id: String!): Product!
 }
 
 input CreateProductInput {
@@ -72,5 +72,5 @@ input UpdateProductInput {
   description: String
 
   """Id of the product"""
-  id: Int!
+  id: String!
 }

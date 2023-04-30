@@ -1,16 +1,26 @@
-import { CreateProductInput } from './dto/create-product.input';
+import { CreateProductInputWithId } from './dto/create-product.input';
 import { ProductsRepository } from './products.repository';
-import { Product } from '@prisma/client';
-import { AggregateObject } from './entities/AggregateObject';
+import { UpdateProductInput } from './dto/update-product.input';
 
 export class ProductFactory {
-  constructor(private readonly productRepository: ProductsRepository) {}
+  constructor(private productRepository: ProductsRepository) {}
 
-  async create(input: CreateProductInput) {
+  // async update(input: UpdateProductInput) {
+  //   const updatedProduct = await this.productRepository.create(input);
+  //
+  //   updatedProduct.update();
+  //
+  //   return updatedProduct;
+  // }
+
+  async create(input: CreateProductInputWithId) {
+    console.log(this.productRepository);
     const newProduct = await this.productRepository.create(input);
 
-    const productAggregate = new AggregateObject<Product>(newProduct);
+    console.log('newProduct', newProduct);
+    newProduct.create();
+    // newProduct.apply(new ProductCreatedEvent(newProduct));
 
-    return productAggregate;
+    return newProduct;
   }
 }

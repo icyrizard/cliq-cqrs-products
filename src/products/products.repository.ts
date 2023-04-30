@@ -1,50 +1,67 @@
-import { CreateProductInput } from './dto/create-product.input';
+import { CreateProductInputWithId } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { Injectable } from '@nestjs/common';
-import { ApiError } from '../exceptions/ApiError';
-import { EventStoreService } from '../eventStore.service';
 import { Product } from './entities/product.entity';
-import { AggregateObject } from './entities/AggregateObject';
+import { EventStoreService } from '../eventStore.service';
 
 @Injectable()
 export class ProductsRepository {
-  constructor(private eventStore: EventStoreService) {}
+  constructor(private eventStoreService: EventStoreService) {}
 
-  async create(data: AggregateObject<Product>, eventType: string) {
-    return this.eventStore.create('product', eventType, data);
+  async create(createProductInput: CreateProductInputWithId) {
+    const product = new Product();
+
+    product.setData(createProductInput);
+    product.create();
+
+    return product;
+
+    // return await this.prisma.product.create({
+    //   data: createProductInput,
+    // });
   }
 
-  async findAll(query) {
-    return await this.eventStore.findMany();
+  async findAll() {
+    return this.eventStoreService.findMany();
+    // return await this.prisma.product.findMany({
+    //   where: query,
+    // });
   }
 
   async findOne(id: string) {
-    return await this.eventStore.findByIdOrThrow(id);
+    return await this.eventStoreService.findByIdOrThrow(id);
   }
 
-  async update(id: string, eventType, updateProductInput: UpdateProductInput) {
-    try {
-      return await this.eventStore.update(id, eventType, updateProductInput);
-    } catch (error) {
-      throw new ApiError(409, 'Unable to update this product');
-    }
+  async update(id: string, updateProductInput: UpdateProductInput) {
+    const product = new Product();
+
+    product.setData(updateProductInput);
+    product.update();
+
+    return product;
   }
 
-  async remove(id: string) {
-    try {
-      return await this.eventStore.remove(id);
-    } catch (error) {
-      throw new ApiError(409, 'Unable to remove this product');
-    }
+  async remove(id: string, eventType: string) {
+    return await this.eventStoreService.remove(id, eventType);
+
+    // try {
+    //   return await this.prisma.product.delete({
+    //     where: {
+    //       id: id,
+    //     },
+    //   });
+    // } catch (error) {
+    //   throw new ApiError(409, 'Unable to remove this product');
+    // }
   }
 
-  async logEvent(id: number, name: string) {
-    // return await this.prisma.eventLog.create({
-    //   data: {
-    //     name: name,
-    //     modelId: id,
-    //     modelName: 'Product',
-    //   },
-    // });
-  }
+  // async logEvent(id: number, name: string) {
+  //   return await this.prisma.eventLog.create({
+  //     data: {
+  //       name: name,
+  //       modelId: id,
+  //       modelName: 'Product',
+  //     },
+  //   });
+  // }
 }

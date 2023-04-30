@@ -56,5 +56,5 @@ describe('ProductEventHandlers', function () {
   //
   //     expect(spy).toBeCalledWith(event);
   //   });
-  });
+  // });
 });

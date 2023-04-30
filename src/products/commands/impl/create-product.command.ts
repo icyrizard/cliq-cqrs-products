@@ -1,5 +1,5 @@
-import { CreateProductInput } from '../../dto/create-product.input';
+import { CreateProductInputWithId } from '../../dto/create-product.input';
 
 export class CreateProductCommand {
-  constructor(public readonly data: CreateProductInput) {}
+  constructor(public readonly data: CreateProductInputWithId) {}
 }

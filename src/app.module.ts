@@ -29,6 +29,6 @@ import { EventStoreService } from './eventStore.service';
     // }),
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, EventStoreService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}

@@ -1,9 +1,15 @@
 import { ObjectType, Field, Float, Int } from '@nestjs/graphql';
+import { AggregateRoot } from '@nestjs/cqrs';
+import { ProductCreatedEvent } from '../events/impl/product-created.event';
+import { CreateProductInputWithId } from '../dto/create-product.input';
+import { ProductUpdatedEvent } from '../events/impl/product-updated.event';
 
 @ObjectType()
-export class Product {
-  @Field(() => Int, { description: 'Id of the product' })
-  id: number;
+export class Product extends AggregateRoot {
+  data: CreateProductInputWithId;
+
+  @Field(() => String, { description: 'Id of the product' })
+  id: string;
   @Field(() => String, { description: 'UUId of the product' })
   name: string;
   @Field(() => String, { description: 'SKU of the product', nullable: true })
@@ -18,4 +24,20 @@ export class Product {
   updatedAt: Date;
   @Field({ description: 'Deletion date of the product', nullable: true })
   deletedAt: Date;
+
+  setData(data: CreateProductInputWithId) {
+    this.data = data;
+  }
+
+  getData() {
+    return this.data;
+  }
+
+  create() {
+    this.apply(new ProductCreatedEvent(this.data));
+  }
+
+  update() {
+    this.apply(new ProductUpdatedEvent(this.data));
+  }
 }

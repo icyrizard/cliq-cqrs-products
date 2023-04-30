@@ -4,6 +4,9 @@ import { Product } from './entities/product.entity';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 
+import * as crypto from 'crypto';
+import * as base32 from 'base32';
+
 @Resolver(() => Product)
 export class ProductsResolver {
   constructor(private readonly productsService: ProductsService) {}
@@ -12,7 +15,12 @@ export class ProductsResolver {
   async createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ) {
-    return await this.productsService.create(createProductInput);
+    const id = base32.encode(crypto.randomBytes(10));
+
+    return await this.productsService.create({
+      id,
+      ...createProductInput,
+    });
   }
 
   @Query(() => [Product], { name: 'products' })
@@ -21,7 +29,7 @@ export class ProductsResolver {
   }
 
   @Query(() => Product, { name: 'product' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.productsService.findOne(id);
   }
 
@@ -33,7 +41,7 @@ export class ProductsResolver {
   }
 
   @Mutation(() => Product)
-  removeProduct(@Args('id', { type: () => Int }) id: number) {
+  removeProduct(@Args('id', { type: () => String }) id: number) {
     return this.productsService.remove(id);
   }
 }

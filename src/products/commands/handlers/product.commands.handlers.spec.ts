@@ -11,14 +11,10 @@ import { CreateProductHandler } from './create-product.handler';
 import { ProductFactory } from '../../product.factory';
 import { ProductCreatedEventHandler } from '../../events/handlers/product-created.event.handler';
 import { ProductCommandHandlers } from './index';
-import { ProductQueryHandlers } from '../../queries/handlers';
 import { ProductEventHandlers } from '../../events/handlers';
-import { UpdateProductCommand } from '../impl/update-product.command';
 import { UpdateProductHandler } from './update-product.handler';
-import { ProductUpdatedEventHandler } from '../../events/handlers/product-updated.event.handler';
 import { RemoveProductHandler } from './remove-product.handler';
-import { ProductRemovedEventHandler } from '../../events/handlers/product-removed.event.handler';
-import { RemoveProductCommand } from '../impl/remove-product.command';
+import { EventStoreService } from '../../../eventStore.service';
 
 describe('ProductCommands', function () {
   let commandBus: CommandBus;
@@ -29,6 +25,7 @@ describe('ProductCommands', function () {
   let productFactory: ProductFactory;
   let repository: ProductsRepository;
   let logEventSpy: jest.SpyInstance;
+  let eventStore: EventStoreService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -41,6 +38,7 @@ describe('ProductCommands', function () {
         CommandBus,
         ProductFactory,
         EventPublisher,
+        EventStoreService,
       ],
     }).compile();
 
@@ -58,48 +56,48 @@ describe('ProductCommands', function () {
 
     productFactory = module.get<ProductFactory>(ProductFactory);
     repository = module.get<ProductsRepository>(ProductsRepository);
+    eventStore = module.get<EventStoreService>(EventStoreService);
 
-    logEventSpy = jest.spyOn(repository, 'logEvent').mockImplementation();
+    // logEventSpy = jest.spyOn(repository, 'logEvent').mockImplementation();
   });
 
-  // describe('ProductCreatedCommandHandler', () => {
-  //   it('It should create a product and trigger an event', async () => {
-  //     const newProduct: Product = {
-  //       id: 1,
-  //       name: 'Product 1',
-  //       price: 9.99,
-  //       description: 'Product description',
-  //       sku: 'product-1',
-  //       uuid: '888efa67-e91a-4a51-9336-10e606aa2a13',
-  //       createdAt: new Date(),
-  //       updatedAt: new Date(),
-  //       deletedAt: null,
-  //     };
-  //
-  //     const data = omit(newProduct, [
-  //       'id',
-  //       'createdAt',
-  //       'updatedAt',
-  //       'deletedAt',
-  //     ]);
-  //
-  //     const spy = jest.spyOn(createProductCommandHandler, 'execute');
-  //
-  //     jest
-  //       .spyOn(repository, 'create')
-  //       .mockImplementation(() => Promise.resolve(newProduct));
-  //
-  //     commandBus.register([CreateProductHandler]);
-  //     eventBus.register([ProductCreatedEventHandler]);
-  //
-  //     const command = new CreateProductCommand(data);
-  //     await commandBus.execute(command);
-  //
-  //     expect(spy).toBeCalledWith(command);
-  //     expect(logEventSpy).toBeCalledWith(newProduct.id, 'created');
-  //   });
-  // });
-  //
+  describe('ProductCreatedCommandHandler', () => {
+    it('It should create a product and trigger an event', async () => {
+      const newProduct: Product = {
+        id: 1,
+        name: 'Product 1',
+        price: 9.99,
+        description: 'Product description',
+        sku: 'product-1',
+        uuid: '888efa67-e91a-4a51-9336-10e606aa2a13',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      };
+
+      const data = omit(newProduct, [
+        'id',
+        'createdAt',
+        'updatedAt',
+        'deletedAt',
+      ]);
+
+      const spy = jest.spyOn(createProductCommandHandler, 'execute');
+
+      // jest
+      //   .spyOn(repository, 'create')
+      //   .mockImplementation(() => Promise.resolve(newProduct));
+
+      commandBus.register([CreateProductHandler]);
+      eventBus.register([ProductCreatedEventHandler]);
+
+      const command = new CreateProductCommand(data);
+      await commandBus.execute(command);
+
+      expect(spy).toBeCalledWith(command);
+    });
+  });
+
   // describe('ProductUpdateCommandHandler', () => {
   //   it('It should update a product and trigger an event', async () => {
   //     const updatedProduct: Product = {

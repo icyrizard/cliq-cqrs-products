@@ -16,7 +16,11 @@ describe('EventStore', () => {
       sku: 'product-1',
     };
 
-    const result = await eventStore.create('product', newProduct);
+    const result = await eventStore.create(
+      'product',
+      'ProductCreatedEvent',
+      newProduct,
+    );
 
     expect(result.id).not.toBeNull();
   });
@@ -29,7 +33,11 @@ describe('EventStore', () => {
       sku: 'product-1',
     };
 
-    const result = await eventStore.create('product', newProduct);
+    const result = await eventStore.create(
+      'product',
+      'ProductCreated',
+      newProduct,
+    );
 
     const { id } = result;
 
@@ -46,7 +54,11 @@ describe('EventStore', () => {
       sku: 'product-1',
     };
 
-    const result = await eventStore.create('product', newProduct);
+    const result = await eventStore.create(
+      'product',
+      'ProductCreated',
+      newProduct,
+    );
 
     const { id } = result;
 
@@ -59,7 +71,7 @@ describe('EventStore', () => {
       sku: 'product-2',
     };
 
-    await eventStore.update(id, updatedProduct);
+    await eventStore.update(id, 'ProductUpdated', updatedProduct);
 
     const latest = await eventStore.findByIdOrThrow(id);
 
@@ -79,14 +91,14 @@ describe('EventStore', () => {
   });
 
   it('retrieve many objects', async () => {
-    await eventStore.create('product', {
+    await eventStore.create('product', 'ProductCreatedEvent', {
       name: 'Product 1',
       price: 9.99,
       description: 'Product description',
       sku: 'product-1',
     });
 
-    await eventStore.create('product', {
+    await eventStore.create('product', 'ProductCreatedEvent', {
       name: 'Product 2',
       price: 42,
       description: 'Product description',
@@ -102,7 +114,7 @@ describe('EventStore', () => {
   });
 
   it('should delete an object', async () => {
-    const product = await eventStore.create('product', {
+    const product = await eventStore.create('product', 'ProductCreated', {
       name: 'Product 1',
       price: 9.99,
       description: 'Product description',
@@ -113,7 +125,7 @@ describe('EventStore', () => {
 
     expect(foundProduct).not.toBeNull();
 
-    await eventStore.remove(product.id);
+    await eventStore.remove(product.id, 'ProductRemovedEvent');
 
     const deletedProduct = await eventStore.findById(product.id);
 

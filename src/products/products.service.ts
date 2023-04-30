@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductInput } from './dto/create-product.input';
+import {
+  CreateProductInput,
+  CreateProductInputWithId,
+} from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { AggregateRoot, CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateProductCommand } from './commands/impl/create-product.command';
@@ -14,7 +17,7 @@ export class ProductsService extends AggregateRoot {
     super();
   }
 
-  async create(createProductInput: CreateProductInput) {
+  async create(createProductInput: CreateProductInputWithId) {
     return await this.commandBus.execute(
       new CreateProductCommand(createProductInput),
     );
@@ -24,7 +27,7 @@ export class ProductsService extends AggregateRoot {
     return await this.queryBus.execute(new FindAllProductsQuery());
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return await this.queryBus.execute(new FindByIdProductQuery(id));
   }
 

@@ -3,8 +3,8 @@ import { InputType, Field, Int, PartialType, Float } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateProductInput extends PartialType(CreateProductInput) {
-  @Field(() => Int, { description: 'Id of the product' })
-  id: number;
+  @Field(() => String, { description: 'Id of the product' })
+  id: string;
   @Field(() => String, { description: 'Name of the product' })
   name: string;
   @Field(() => String, { description: 'SKU of the product', nullable: true })

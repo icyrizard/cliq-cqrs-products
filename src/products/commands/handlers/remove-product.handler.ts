@@ -8,17 +8,17 @@ export class RemoveProductHandler
   implements ICommandHandler<RemoveProductCommand>
 {
   constructor(
-    private readonly productRepository: ProductsRepository,
+    private productRepository: ProductsRepository,
     private eventBus: EventBus,
   ) {}
 
   async execute(command: RemoveProductCommand) {
     const { id } = command;
 
-    const product = await this.productRepository.remove(id);
+    // const product = await this.productRepository.remove(id);
 
     this.eventBus.publish(new ProductRemovedEvent(id));
 
-    return product;
+    // return product;
   }
 }
