@@ -36,8 +36,9 @@ happened. Making it so that only when you interpret the events in the correct or
 Let me jump back to the beginning where I've mentioned the in-memory **EventStore**. The implementation is located top-level at `src/event-store.service.ts`.
 This EventStore follows the principle of only updating the state of the application by using events. The events are
 stored in the `store` Map. Each object gets a unique key, all updates to the object are stored at the same key in the form of a list -
-a new update to the object is simply merged with the latest version of the object and appended to the list of events.
-Note that we then do loose a bit of the functionality of Event Sourcing, because we only store the latest version of the
+an update to the object is simply merged with the latest version of the object and appended to the list of events.
+
+Note that we then do lose a bit of the functionality of Event Sourcing, because we only store the latest version of the
 object each time. We do however can jump back into history, we just do not have a separate view of the object that
 caused the update. Each event has a name to specify which event caused the update, it also has a type to differentiate between
 types of objects stored in the EventStore.
@@ -49,12 +50,11 @@ chosen for a smaller concise more readable ID.
 When retrieving a single object from the EventStore, the EventStore will retrieve the latest event for the given key
 and return that state. Note again, this is a simplified version of a real EventStore. For the real version you would
 need to retrieve all events for the given key and apply them to the object to get the latest state - however, to keep things a
-bit easier I've chosen to only retrieve the latest event which holds the
-last version.
+bit easier I've chosen to only retrieve the latest event which holds the last version.
 
-Ideally, you would want to persist the events to a database and therefore use a existing technologies that implement
+Ideally, you would want to persist all the events to a database and therefore use a existing technologies that implement
 the illustrated behaviour as explained above (i.e, gather all events and apply them on top of each other to get the latest
-state of the object). **But then I would have as much fun as I did now!**
+state of the object). **But then I would not have as much fun as I did now!**
 
 See below for install instructions, how to test the application and how to use the GraphQL playground 
 (or CURL, or import CURL in to Postman) to test the application.
