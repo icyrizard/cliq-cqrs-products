@@ -7,7 +7,27 @@ done to keep the project simple and to focus on the CQRS and Event Sourcing part
 I've written tests for the CommandsHandlers, EventsHandlers and QueryHandlers. Most intresting parts of the code
 live in the `products` module. The `products` module is a simple CRUD module that uses CQRS and Event Sourcing.
 
-The in-memory EventStore is implemented is located top-level in the `src` folder.
+The in-memory EventStore is implemented is located top-level in the `src/event-store.service.ts` file. The EventStore
+follows the principle of only updating the state of the application by using events. The events are stored in the
+`store` Map. Each object gets a unique key, all updates to the object are stored at the same key - just appended to
+the end. Each event has a name to specify which event caused the update, it also has a type to differentiate between
+different types of objects stored in the EventStore.
+
+So, when saving a new event to the EventStore, the EventStore will insert the event into the `store` Map given the 
+unique key. The key is a random generated ID, preferably a UUID to prevent clashes but for this testing application I've
+chosen for a smaller concise more readable ID.
+
+When retrieving a single object from the EventStore, the EventStore will retrieve the latest event for the given key
+and return that state. This is a simplified version of a real EventStore, but it illustrates the concept of Event Sourcing.
+For the real version you would need to retrieve all events for the given key and apply them to the object to get the
+latest state - however, to keep things a bit easier I've chosen to only retrieve the latest event which holds the 
+last version.
+
+Ideally, you would want to persist the events to a database and therefore use a existing technologies that implement
+the illustrated behaviour as explained above (i.e, gather all events and apply them on top of each other to get the latest
+state of the object). But then I would have as much fun as I did now! :)
+
+See below for install instructions, how to test the application and how to use the GraphQL playground (or CURL, or import Curl in to Postman) to test the application.
 
 ## Installation
 
