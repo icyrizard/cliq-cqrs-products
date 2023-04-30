@@ -100,7 +100,7 @@ export class EventStoreService implements OnModuleInit {
     return Array.from(this.store, ([id, value]) => ({
       id,
       ...value.at(-1),
-    }));
+    })).filter((data) => !data.deletedAt);
   }
 
   async remove(id: string, eventType: string) {

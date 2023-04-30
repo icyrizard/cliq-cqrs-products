@@ -12,6 +12,7 @@ import {
   EventStoreData,
   EventStoreService,
 } from '../../../event-store.service';
+import { EventsEnum } from '../../common/events.enum';
 
 describe('ProductCommands', function () {
   let queryBus: QueryBus;
@@ -53,7 +54,7 @@ describe('ProductCommands', function () {
         id: Math.random().toString(),
         name: 'Product 1',
         type: 'product',
-        eventType: 'ProductCreatedEvent',
+        eventType: EventsEnum.ProductCreated,
         price: 9.99,
         description: 'Product description',
         sku: 'product-1',
@@ -85,7 +86,7 @@ describe('ProductCommands', function () {
           id: Math.random().toString(),
           name: 'Product 1',
           type: 'product',
-          eventType: 'ProductCreatedEvent',
+          eventType: EventsEnum.ProductCreated,
           price: 9.99,
           description: 'Product description',
           sku: 'product-1',
