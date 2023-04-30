@@ -26,9 +26,10 @@ last version.
 
 Ideally, you would want to persist the events to a database and therefore use a existing technologies that implement
 the illustrated behaviour as explained above (i.e, gather all events and apply them on top of each other to get the latest
-state of the object). But then I would have as much fun as I did now! :)
+state of the object). **But then I would have as much fun as I did now!**
 
-See below for install instructions, how to test the application and how to use the GraphQL playground (or CURL, or import Curl in to Postman) to test the application.
+See below for install instructions, how to test the application and how to use the GraphQL playground 
+(or CURL, or import CURL in to Postman) to test the application.
 
 ## Installation
 
