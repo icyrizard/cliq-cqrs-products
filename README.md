@@ -2,27 +2,48 @@
 
 This is a **NestJS** application that illustrates the use of **CQRS** in combination with **Event Sourcing**. For this project
 I have chosen to use an in-memory **EventStore**, by building my own simple EventStore. This means that the events are
-not persisted to a database. This is done to keep the project simple and to focus on the CQRS and Event Sourcing part of
-the application.
+not persisted to a database / event-store. This is done to keep the project simple to follow and to focus on the
+CQRS and Event Sourcing part of the application.
 
 I've written tests for the **CommandHandlers**, **EventHandlers** and **QueryHandlers**. Most interesting parts of the code
 live in the `products` module. The `products` module is a simple CRUD module that uses CQRS and Event Sourcing.
 
-The in-memory EventStore is implemented is located top-level in the `src/event-store.service.ts` file. The EventStore
-follows the principle of only updating the state of the application by using events. The events are stored in the
-`store` Map. Each object gets a unique key, all updates to the object are stored at the same key in the form of a list - 
+In the case of a requests that wants to create, update or delete anything, a requests comes in to the `products` module
+that will ultimately be handled by a **CommandHandler**. The **CommandHandler** will validate the request and if valid,
+it will create a **Command** and dispatch it to the **CommandBus**. The **CommandBus** will then find the correct **
+CommandHandler** and execute the **CommandHandler**. In turn the **CommandHandler** create an **Event** and dispatch it to the **EventBus**.
+
+The **EventBus** will then find the correct **EventHandler** and execute it. Within the **EventHandler** 
+updates to **EventStore** are made.
+
+The other side of things are read request, meaning findById of findAll requests. These requests are handled by a
+**QueryHandler**. The **QueryHandler** will retrieve the data from the **EventStore** and return it to the user. It uses
+a QueryBus to find the correct **QueryHandler**. 
+
+Thus separating the writes from the reads and using the **CommandBus** and **QueryBus** to find the correct handlers,
+it's becomes scalable and easier to use in a microservice architecture. Any hooked up microservice can send a command to the **
+CommandBus** or a query to the **QueryBus** and the correct handler will be found and executed. It makes the system more loosely
+coupled but also `eventually consistent`. It's very important to note that such a system is eventually consistent. The representation of
+the data is a mere projection of the events that have happened. Making it so that only when you interpret the events in the
+correct order, you will get the correct representation of the data. 
+
+Let me jump back to the beginning when I've mentioned the in-memory **EventStore**. The implementation is located top-level at `src/event-store.service.ts`.
+This EventStore follows the principle of only updating the state of the application by using events. The events are
+stored in the `store` Map. Each object gets a unique key, all updates to the object are stored at the same key in the form of a list -
 a new update to the object is simply merged with the latest version of the object and appended to the list of events.
-Each event has a name to specify which event caused the update, it also has a type to differentiate between
+Note that we then do loose a bit of the functionality of Event Sourcing, because we only store the latest version of the
+object each time. We do however can jump back into history, we just do not have a separate view of the object that
+caused the update. Each event has a name to specify which event caused the update, it also has a type to differentiate between
 types of objects stored in the EventStore.
 
-So, when saving a new event to the EventStore, the EventStore will insert the event into the `store` Map given the 
+So, when saving a new event to the EventStore, the EventStore will insert the event into the `store` Map at the given
 unique key. The key is a random generated ID, preferably a UUID to prevent clashes but for this testing application I've
 chosen for a smaller concise more readable ID.
 
 When retrieving a single object from the EventStore, the EventStore will retrieve the latest event for the given key
-and return that state. This is a simplified version of a real EventStore, but it illustrates the concept of Event Sourcing.
-For the real version you would need to retrieve all events for the given key and apply them to the object to get the
-latest state - however, to keep things a bit easier I've chosen to only retrieve the latest event which holds the 
+and return that state. Note again, this is a simplified version of a real EventStore. For the real version you would
+need to retrieve all events for the given key and apply them to the object to get the latest state - however, to keep things a
+bit easier I've chosen to only retrieve the latest event which holds the
 last version.
 
 Ideally, you would want to persist the events to a database and therefore use a existing technologies that implement
