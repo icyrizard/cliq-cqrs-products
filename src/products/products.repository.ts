@@ -15,17 +15,10 @@ export class ProductsRepository {
     product.create();
 
     return product;
-
-    // return await this.prisma.product.create({
-    //   data: createProductInput,
-    // });
   }
 
   async findAll() {
     return this.eventStoreService.findMany();
-    // return await this.prisma.product.findMany({
-    //   where: query,
-    // });
   }
 
   async findOne(id: string) {
@@ -48,25 +41,5 @@ export class ProductsRepository {
     product.remove();
 
     return product;
-
-    // try {
-    //   return await this.prisma.product.delete({
-    //     where: {
-    //       id: id,
-    //     },
-    //   });
-    // } catch (error) {
-    //   throw new ApiError(409, 'Unable to remove this product');
-    // }
   }
-
-  // async logEvent(id: number, name: string) {
-  //   return await this.prisma.eventLog.create({
-  //     data: {
-  //       name: name,
-  //       modelId: id,
-  //       modelName: 'Product',
-  //     },
-  //   });
-  // }
 }
