@@ -26,10 +26,10 @@ The other side of things are read request, meaning findById of findAll requests.
 a QueryBus to find the correct **QueryHandler**. 
 
 Thus separating the writes from the reads and using the **CommandBus** and **QueryBus** to find the correct handlers,
-it's becomes scalable and easier to use in a microservice architecture. Any hooked up microservice can send a command to the **CommandBus** or a query to the **QueryBus** and the correct handler will be found and executed. It makes the system more loosely
-coupled but also `eventually consistent`. It's very important to note that such a system is eventually consistent. The representation of
-the data is a mere projection of the events that have happened. Making it so that only when you interpret the events in the
-correct order, you will get the correct representation of the data. 
+it becomes a lot more scalable and easier to use in a microservice architecture. Any hooked up service can send a command to the **CommandBus** 
+or a query to the **QueryBus** - thus finding other (micro)services that can handle any task it has subscribed to. It makes the system more loosely
+coupled but also `eventually consistent`. The representation of the data is a mere projection of the events that have
+happened. Making it so that only when you interpret the events in the correct order, you will get the correct representation of the data.
 
 ### About the EventStore
 
