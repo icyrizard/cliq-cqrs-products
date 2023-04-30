@@ -9,9 +9,10 @@ live in the `products` module. The `products` module is a simple CRUD module tha
 
 The in-memory EventStore is implemented is located top-level in the `src/event-store.service.ts` file. The EventStore
 follows the principle of only updating the state of the application by using events. The events are stored in the
-`store` Map. Each object gets a unique key, all updates to the object are stored at the same key - just appended to
-the end. Each event has a name to specify which event caused the update, it also has a type to differentiate between
-different types of objects stored in the EventStore.
+`store` Map. Each object gets a unique key, all updates to the object are stored at the same key in the form of a list - 
+a new update to the object is simply merged with the latest version of the object and appended to the list of events.
+Each event has a name to specify which event caused the update, it also has a type to differentiate between
+types of objects stored in the EventStore.
 
 So, when saving a new event to the EventStore, the EventStore will insert the event into the `store` Map given the 
 unique key. The key is a random generated ID, preferably a UUID to prevent clashes but for this testing application I've
