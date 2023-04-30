@@ -44,7 +44,5 @@ RUN chown -R cliq:nodejs /usr/local/bin/pm2-runtime
 EXPOSE 80
 # USER cliq
 
-RUN npm run prisma:init
-
 
 CMD ["./entrypoint.sh"]
