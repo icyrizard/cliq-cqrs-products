@@ -11,7 +11,7 @@ import { ProductCreatedEventHandler } from '../../events/handlers/product-create
 import { ProductCommandHandlers } from './index';
 import { UpdateProductHandler } from './update-product.handler';
 import { RemoveProductHandler } from './remove-product.handler';
-import { EventStoreService } from '../../../eventStore.service';
+import { EventStoreData, EventStoreService } from '../../../eventStore.service';
 import { ProductsEventStore } from '../../products.event-store';
 import { ProductUpdatedEventHandler } from '../../events/handlers/product-updated.event.handler';
 import { UpdateProductCommand } from '../impl/update-product.command';
@@ -33,6 +33,7 @@ describe('ProductCommands', function () {
   let productCreatedEventHandler: ProductCreatedEventHandler;
   let productUpdatedEventHandler: ProductUpdatedEventHandler;
   let productRemovedEventHandler: ProductRemovedEventHandler;
+  let eventStore: EventStoreService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -75,9 +76,10 @@ describe('ProductCommands', function () {
       ProductRemovedEventHandler,
     );
 
+    eventStore = module.get<EventStoreService>(EventStoreService);
+
     jest.spyOn(productCreatedEventHandler, 'handle').mockImplementation();
     jest.spyOn(productUpdatedEventHandler, 'handle').mockImplementation();
-    jest.spyOn(productRemovedEventHandler, 'handle').mockImplementation();
   });
 
   describe('ProductCreatedCommandHandler', () => {
@@ -125,12 +127,29 @@ describe('ProductCommands', function () {
   });
 
   describe('ProductRemoveCommandHandler', () => {
-    it('It should update a product and trigger an event', async () => {
-      const toDeleteProduct: Partial<Product> = {
+    it('It should call the remove command trigger the right event', async () => {
+      const toDeleteProduct: EventStoreData = {
         id: Math.random().toString(),
+        name: 'Product 2',
+        price: 19.99,
+        description: 'Product description updated',
+        sku: 'product-2',
+        type: 'product',
+        eventType: 'ProductUpdatedEvent',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
       };
 
       const data = toDeleteProduct.id;
+
+      const removeSpy = jest
+        .spyOn(productRemovedEventHandler, 'handle')
+        .mockImplementation();
+
+      jest
+        .spyOn(eventStore, 'findByIdOrThrow')
+        .mockImplementation(() => Promise.resolve(toDeleteProduct));
 
       const spy = jest.spyOn(removeProductCommandHandler, 'execute');
 
@@ -141,6 +160,7 @@ describe('ProductCommands', function () {
       await commandBus.execute(command);
 
       expect(spy).toBeCalledWith(command);
+      expect(removeSpy).toBeCalledTimes(1);
     });
   });
 });

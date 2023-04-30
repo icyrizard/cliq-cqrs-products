@@ -4,8 +4,6 @@ import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ProductsModule } from './products/products.module';
-import { PrismaService } from './prisma.service';
-import { EventStoreService } from './eventStore.service';
 
 @Module({
   imports: [
@@ -14,21 +12,8 @@ import { EventStoreService } from './eventStore.service';
       autoSchemaFile: [process.cwd(), 'src/schema.gql'].join('/'),
     }),
     ProductsModule,
-    // EventStoreModule.register({
-    //   type: 'event-store',
-    //   tcpEndpoint: {
-    //     host: 'localhost',
-    //     port: 1113,
-    //   },
-    //   options: {
-    //     defaultUserCredentials: {
-    //       username: 'admin',
-    //       password: 'changeit',
-    //     },
-    //   },
-    // }),
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService],
 })
 export class AppModule {}

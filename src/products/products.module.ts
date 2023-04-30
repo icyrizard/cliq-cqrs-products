@@ -24,28 +24,7 @@ export const EventHandlers = ProductEventHandlers;
 export const QueryHandlers = [FindAllProductsHandler, FindByIdProductsHandler];
 
 @Module({
-  imports: [
-    CqrsModule,
-    // EventStoreModule.registerFeature({
-    //   type: 'event-store',
-    //   featureStreamName: '$svc-product',
-    //   subscriptions: [
-    //     {
-    //       type: EventStoreSubscriptionType.Persistent,
-    //       stream: '$svc-product',
-    //       persistentSubscriptionName: 'product',
-    //     },
-    //   ],
-    //   eventHandlers: {
-    //     // ProductCreatedEvent: ProductCreatedEventHandler,
-    //     // ...EventHandlers,
-    //     ProductCreatedEvent: (data) => () => {
-    //       console.log(data);
-    //       new ProductCreatedEvent(data);
-    //     },
-    //   },
-    // }),
-  ],
+  imports: [CqrsModule],
   providers: [
     ProductsRepository,
     ProductFactory,
