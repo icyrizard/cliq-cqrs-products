@@ -13,6 +13,7 @@ datasource db {
 model Product {
   id          Int       @id @default(autoincrement())
   uuid        String    @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  verion      Int       @default(1)
   name        String    @db.VarChar(128)
   description String?   @db.Text
   price       Float?
@@ -23,6 +24,18 @@ model Product {
   // orders      Order[]
   // brandId     Int
   // brand       Brand    @relation(fields: [brandId], references: [id])
+}
+
+model Aggregate {
+    id        Int       @id @default(autoincrement())
+    uuid      String    @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    name      String    @db.VarChar(32)
+    modelName String    @db.VarChar(32)
+    modelId   Int
+    fromVersion Int
+    toVersion Int
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
 }
 
 model EventLog {

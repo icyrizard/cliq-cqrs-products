@@ -5,8 +5,6 @@ export class Product {
   @Field(() => Int, { description: 'Id of the product' })
   id: number;
   @Field(() => String, { description: 'UUId of the product' })
-  uuid: string;
-  @Field(() => String, { description: 'Name of the product' })
   name: string;
   @Field(() => String, { description: 'SKU of the product', nullable: true })
   sku: string;

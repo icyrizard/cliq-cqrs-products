@@ -9,8 +9,10 @@ export class ProductCreatedEventHandler
   constructor(private productsRepository: ProductsRepository) {}
 
   async handle(event: ProductCreatedEvent) {
-    const { id } = event;
+    const { product } = event;
 
-    await this.productsRepository.logEvent(id, 'created');
+    return await this.productsRepository.create(product, 'ProductCreatedEvent');
+
+    // await this.productsRepository.logEvent(id, 'created');
   }
 }

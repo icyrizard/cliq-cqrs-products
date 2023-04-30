@@ -11,6 +11,7 @@ import { FindByIdProductsHandler } from './queries/handlers/find-by-id-products.
 import { UpdateProductHandler } from './commands/handlers/update-product.handler';
 import { RemoveProductHandler } from './commands/handlers/remove-product.handler';
 import { ProductEventHandlers } from './events/handlers';
+import { EventStoreService } from '../eventStore.service';
 
 export const CommandHandlers = [
   CreateProductHandler,
@@ -53,6 +54,7 @@ export const QueryHandlers = [FindAllProductsHandler, FindByIdProductsHandler];
     ...EventHandlers,
     ...QueryHandlers,
     ProductsRepository,
+    EventStoreService,
   ],
 })
 export class ProductsModule {}
