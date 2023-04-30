@@ -89,7 +89,6 @@ describe('ProductCommands', function () {
           price: 9.99,
           description: 'Product description',
           sku: 'product-1',
-          uuid: '888efa67-e91a-4a51-9336-10e606aa2a13',
           createdAt: new Date(),
           updatedAt: new Date(),
           deletedAt: null,

@@ -47,7 +47,7 @@ describe('ProductCommands', function () {
   });
 
   describe('GetProductById', () => {
-    it('It retrieve a product by Id - call the right queryBus', async () => {
+    it('should retrieve a product by Id - call the right queryBus', async () => {
       const spy = jest.spyOn(queryBus, 'execute').mockImplementation();
 
       queryBus.register([FindByIdProductsHandler]);
@@ -59,7 +59,7 @@ describe('ProductCommands', function () {
   });
 
   describe('GetProducts', () => {
-    it('It retrieve all products - call the right queryBus', async () => {
+    it('should retrieve all products - call the right queryBus', async () => {
       const spy = jest.spyOn(queryBus, 'execute').mockImplementation();
 
       queryBus.register([FindAllProductsHandler]);
@@ -71,7 +71,7 @@ describe('ProductCommands', function () {
   });
 
   describe('Create a product', () => {
-    it('Create a new product - call the right command bus', async () => {
+    it('should create a new product - call the right command bus', async () => {
       const product: CreateProductInputWithId = {
         id: Math.random().toString(),
         name: 'Product 1',

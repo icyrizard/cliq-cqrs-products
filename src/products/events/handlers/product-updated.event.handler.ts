@@ -1,6 +1,7 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { ProductUpdatedEvent } from '../impl/product-updated.event';
 import { EventStoreService } from '../../../event-store.service';
+import { EventsEnum } from '../../common/events.enum';
 
 @EventsHandler(ProductUpdatedEvent)
 export class ProductUpdatedEventHandler
@@ -13,7 +14,7 @@ export class ProductUpdatedEventHandler
 
     const { id } = data;
 
-    await this.eventStore.update(id, 'ProductUpdatedEvent', data);
+    await this.eventStore.update(id, EventsEnum.ProductUpdated, data);
 
     return data;
   }

@@ -1,5 +1,6 @@
 import { Product } from './products/entities/product.entity';
 import { DataWithId, EventStoreService } from './event-store.service';
+import { EventsEnum } from './products/common/events.enum';
 
 describe('EventStore', () => {
   let eventStore: EventStoreService;
@@ -19,7 +20,7 @@ describe('EventStore', () => {
 
     const result = await eventStore.create(
       'product',
-      'ProductCreatedEvent',
+      EventsEnum.ProductCreated,
       newProduct,
     );
 
@@ -37,7 +38,7 @@ describe('EventStore', () => {
 
     const result = await eventStore.create(
       'product',
-      'ProductCreated',
+      EventsEnum.ProductCreated,
       newProduct,
     );
 
@@ -59,7 +60,7 @@ describe('EventStore', () => {
 
     const result = await eventStore.create(
       'product',
-      'ProductCreated',
+      EventsEnum.ProductCreated,
       newProduct,
     );
 
@@ -74,7 +75,7 @@ describe('EventStore', () => {
       sku: 'product-2',
     };
 
-    await eventStore.update(id, 'ProductUpdated', updatedProduct);
+    await eventStore.update(id, EventsEnum.ProductUpdated, updatedProduct);
 
     const latest = await eventStore.findByIdOrThrow(id);
 
@@ -92,7 +93,7 @@ describe('EventStore', () => {
   });
 
   it('retrieve many objects', async () => {
-    await eventStore.create('product', 'ProductCreatedEvent', {
+    await eventStore.create('product', EventsEnum.ProductCreated, {
       id: Math.random().toString(),
       name: 'Product 1',
       price: 9.99,
@@ -100,7 +101,7 @@ describe('EventStore', () => {
       sku: 'product-1',
     });
 
-    await eventStore.create('product', 'ProductCreatedEvent', {
+    await eventStore.create('product', EventsEnum.ProductCreated, {
       id: Math.random().toString(),
       name: 'Product 2',
       price: 42,
@@ -115,19 +116,23 @@ describe('EventStore', () => {
   });
 
   it('should delete an object', async () => {
-    const product = await eventStore.create('product', 'ProductCreated', {
-      id: Math.random().toString(),
-      name: 'Product 1',
-      price: 9.99,
-      description: 'Product description',
-      sku: 'product-1',
-    });
+    const product = await eventStore.create(
+      'product',
+      EventsEnum.ProductCreated,
+      {
+        id: Math.random().toString(),
+        name: 'Product 1',
+        price: 9.99,
+        description: 'Product description',
+        sku: 'product-1',
+      },
+    );
 
     const foundProduct = await eventStore.findByIdOrThrow(product.id);
 
     expect(foundProduct).not.toBeNull();
 
-    await eventStore.remove(product.id, 'ProductRemovedEvent');
+    await eventStore.remove(product.id, EventsEnum.ProductRemoved);
 
     const deletedProduct = await eventStore.findById(product.id);
 

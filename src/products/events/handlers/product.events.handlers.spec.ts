@@ -11,6 +11,7 @@ import { ProductUpdatedEventHandler } from './product-updated.event.handler';
 import { ProductUpdatedEvent } from '../impl/product-updated.event';
 import { ProductRemovedEvent } from '../impl/product-removed.event';
 import { ProductRemovedEventHandler } from './product-removed.event.handler';
+import { EventsEnum } from '../../common/events.enum';
 
 describe('ProductEventHandlers', function () {
   let productCreatedEventHandler: ProductCreatedEventHandler;
@@ -48,7 +49,7 @@ describe('ProductEventHandlers', function () {
   });
 
   describe('ProductCreatedEventHandler', () => {
-    it('It should add the event to the eventStore', async () => {
+    it('should add the event to the eventStore', async () => {
       const newProduct: CreateProductInputWithId = {
         id: Math.random().toString(),
         name: 'Product 1',
@@ -72,14 +73,14 @@ describe('ProductEventHandlers', function () {
 
       expect(eventStorySpy).toBeCalledWith(
         'product',
-        'ProductCreatedEvent',
+        EventsEnum.ProductCreated,
         newProduct,
       );
     });
   });
 
   describe('ProductUpdatedEventHandler', () => {
-    it('It should update the event in the eventStore', async () => {
+    it('should update the event in the eventStore', async () => {
       const productUpdated: CreateProductInputWithId = {
         id: Math.random().toString(),
         name: 'Product 1',
@@ -104,14 +105,14 @@ describe('ProductEventHandlers', function () {
 
       expect(eventStorySpy).toBeCalledWith(
         productUpdated.id,
-        'ProductUpdatedEvent',
+        EventsEnum.ProductUpdated,
         productUpdated,
       );
     });
   });
 
   describe('ProductRemovedEventHandler', () => {
-    it('It should call remove in the eventStore', async () => {
+    it('should call remove in the eventStore', async () => {
       const productDeleted: CreateProductInputWithId = {
         id: Math.random().toString(),
         name: 'Product 1',
@@ -136,7 +137,7 @@ describe('ProductEventHandlers', function () {
 
       expect(eventStorySpy).toBeCalledWith(
         productDeleted.id,
-        'ProductRemovedEvent',
+        EventsEnum.ProductRemoved,
       );
     });
   });
