@@ -1,4 +1,9 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  OnModuleInit,
+} from '@nestjs/common';
 import { isEmpty } from 'lodash';
 
 export interface EventStoreData {
@@ -64,9 +69,9 @@ export class EventStoreService implements OnModuleInit {
 
     if (isEmpty(data) || data.at(-1).deletedAt) {
       // throw new HttpException('Not found', HttpStatus.FORBIDDEN);
-      console.log('Not found', id, data);
+      console.log('Not found', id);
 
-      return;
+      return data;
     }
 
     return data.at(-1);
@@ -78,7 +83,7 @@ export class EventStoreService implements OnModuleInit {
     if (isEmpty(currentData) || currentData.at(-1).deletedAt) {
       console.log('Not found for update', id, currentData);
       // throw new HttpException('Not found', HttpStatus.FORBIDDEN);
-      return;
+      return currentData;
     }
 
     const newData = {
@@ -107,9 +112,10 @@ export class EventStoreService implements OnModuleInit {
     const currentData = this.store.get(id) || [];
 
     if (isEmpty(currentData) || currentData.at(-1).deletedAt) {
-      console.log('Not found for removal', id, currentData);
+      console.log('Not found for removal', id);
+
       // throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-      return;
+      return currentData;
     }
 
     const newData = {

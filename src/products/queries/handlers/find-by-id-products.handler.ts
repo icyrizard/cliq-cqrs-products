@@ -1,7 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ProductsRepository } from '../../products.repository';
 import { FindByIdProductQuery } from '../impl/find-by-id-product.query';
-import { EventStoreData } from '../../../event-store.service';
 
 @QueryHandler(FindByIdProductQuery)
 export class FindByIdProductsHandler
@@ -9,7 +8,7 @@ export class FindByIdProductsHandler
 {
   constructor(private productsRepository: ProductsRepository) {}
 
-  async execute(query: FindByIdProductQuery): Promise<EventStoreData> {
+  async execute(query: FindByIdProductQuery) {
     const { id } = query;
 
     return this.productsRepository.findOne(id);
