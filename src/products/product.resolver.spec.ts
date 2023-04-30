@@ -21,7 +21,6 @@ import { RemoveProductHandler } from './commands/handlers/remove-product.handler
 describe('ProductCommands', function () {
   let queryBus: QueryBus;
   let resolver: ProductsResolver;
-  let service: ProductsService;
   let commandBus: CommandBus;
 
   beforeEach(async () => {
@@ -42,7 +41,6 @@ describe('ProductCommands', function () {
     }).compile();
 
     resolver = module.get<ProductsResolver>(ProductsResolver);
-    service = module.get<ProductsService>(ProductsService);
 
     commandBus = module.get<CommandBus>(CommandBus);
     queryBus = module.get<QueryBus>(QueryBus);
