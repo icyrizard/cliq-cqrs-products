@@ -14,12 +14,12 @@ those you can find in the products module as well.
 ### Some theory about CQRS and Event Sourcing
 
 In the case of a requests that wants to create, update or delete anything, a requests comes in to the `products` module
-that will ultimately be handled by a **CommandHandler**. The **CommandHandler** will validate the request and if valid,
-it will create a **Command** and dispatch it to the **CommandBus**. The **CommandBus** will then find the correct **
-CommandHandler** and execute the **CommandHandler**. In turn the **CommandHandler** create an **Event** and dispatch it to the **EventBus**.
+that will ultimately be handled by a **CommandHandler**. The CommandHandler will validate the request and if valid,
+it will create a **Command** and dispatch it to the CommandBus. The CommandBus will then find the correct
+CommandHandler and execute the CommandHandler. In turn the CommandHandler create an **Event** and dispatch it to the **EventBus**.
 
-The **EventBus** will then find the correct **EventHandler** and execute it. Within the **EventHandler** 
-updates to **EventStore** are made.
+The EventBus will then find the correct EventHandler and execute it. Within the EventHandler
+updates to EventStore are made.
 
 The other side of things are read request, meaning findById of findAll requests. These requests are handled by a
 **QueryHandler**. The **QueryHandler** will retrieve the data from the **EventStore** and return it to the user. It uses
